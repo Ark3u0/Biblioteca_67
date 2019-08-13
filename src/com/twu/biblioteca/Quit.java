@@ -1,11 +1,9 @@
 package com.twu.biblioteca;
 
-import java.io.PrintStream;
-
 public class Quit implements Command {
 
     @Override
-    public void perform(final PrintStream out, final BibliotecaApp app) {
+    public void perform(final BibliotecaApp app) {
         app.quit();
     }
 

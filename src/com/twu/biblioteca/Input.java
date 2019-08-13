@@ -13,7 +13,6 @@ public class Input {
 
     public Optional<Integer> getSelection() throws IOException {
         String line = reader.readLine();
-        reader.reset();
 
         try {
             return Optional.of(Integer.parseInt(line));

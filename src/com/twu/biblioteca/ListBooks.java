@@ -1,16 +1,16 @@
 package com.twu.biblioteca;
 
-import java.io.PrintStream;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListBooks implements Command {
-    private final static List<Book> books = Arrays.asList(
-            new Book("Stranger in a Strange Land", "Robert A. Heinlein", 1961),
-            new Book("1984", "George Orwell", 1949),
-            new Book("Fahrenheit 451", "Ray Bradbury", 1953),
-            new Book("Animal Farm", "George Orwell", 1945),
-            new Book("Brave New World", "Aldous Huxley", 1932));
+    private Output out;
+    private Catalog catalog;
+
+    public ListBooks(final Output out, final Catalog catalog) {
+        this.out = out;
+        this.catalog = catalog;
+    }
 
     @Override
     public String toString() {
@@ -18,9 +18,14 @@ public class ListBooks implements Command {
     }
 
     @Override
-    public void perform(PrintStream out, final BibliotecaApp app) {
-        for (Book book : books) {
-            out.println(book.toString());
+    public void perform(final BibliotecaApp app) {
+        List<String> toWrite = new ArrayList<>();
+
+        toWrite.add("Books: ");
+        for (Book book : catalog.listAvailableBooks()) {
+            toWrite.add(book.toString());
         }
+
+        out.write(toWrite);
     }
 }

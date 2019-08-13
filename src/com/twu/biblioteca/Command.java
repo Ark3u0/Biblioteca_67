@@ -1,7 +1,7 @@
 package com.twu.biblioteca;
 
-import java.io.PrintStream;
+import java.io.IOException;
 
 public interface Command {
-    void perform(PrintStream out, final BibliotecaApp app);
+    void perform(final BibliotecaApp app) throws IOException;
 }

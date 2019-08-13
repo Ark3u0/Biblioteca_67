@@ -17,13 +17,13 @@ import static org.mockito.Mockito.when;
 public class BibliotecaAppTest {
 
     private BibliotecaApp app;
-    private PrintStream output;
+    private Output output;
     private Input input;
     private Menu menu;
 
     @Before
     public void setup() {
-        output = mock(PrintStream.class);
+        output = mock(Output.class);
         input = mock(Input.class);
         menu = mock(Menu.class);
         app = new BibliotecaApp(output, input, menu);
@@ -51,7 +51,7 @@ public class BibliotecaAppTest {
     public void shouldWelcomeUsersAndPrintMenuOnStartUp() throws IOException {
         app.welcome();
 
-        verify(output).println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
+        verify(output).write("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
         verify(menu).print();
     }
 }

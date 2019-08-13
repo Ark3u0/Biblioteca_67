@@ -3,30 +3,38 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.io.PrintStream;
 
+import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class ListBooksTest {
 
-    private PrintStream output;
+    private Output output;
     private Command command;
+    private Catalog catalog;
+    private Book book1;
+    private Book book2;
 
     @Before
     public void setup() {
-        output = mock(PrintStream.class);
-        command = new ListBooks();
+        book1 = new Book("Stranger in a Strange Land", "Robert A. Heinlein", 1961);
+        book2 = new Book("1984", "George Orwell", 1949);
+        catalog = new Catalog(asList(book1, book2));
+        output = mock(Output.class);
+        command = new ListBooks(output, catalog);
     }
 
     @Test
-    public void shouldListBooksWhenCommandIsPerformed() {
-        command.perform(output, null);
+    public void shouldListBooksWhenCommandIsPerformed() throws IOException {
+        command.perform(null);
 
-        verify(output).println("Stranger in a Strange Land, Robert A. Heinlein, 1961");
-        verify(output).println("1984, George Orwell, 1949");
-        verify(output).println("Fahrenheit 451, Ray Bradbury, 1953");
-        verify(output).println("Animal Farm, George Orwell, 1945");
-        verify(output).println("Brave New World, Aldous Huxley, 1932");
+        verify(output).write(asList(
+                "Books: ",
+                book1.toString(),
+                book2.toString()
+        ));
     }
 }

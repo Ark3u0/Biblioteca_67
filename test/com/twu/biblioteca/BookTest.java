@@ -2,6 +2,7 @@ package com.twu.biblioteca;
 
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
 
 public class BookTest {
@@ -10,6 +11,6 @@ public class BookTest {
     public void shouldWriteBookTitleAuthorAndYearToString() {
         Book book = new Book("TITLE", "AUTHOR", 1960);
 
-        assertEquals("TITLE, AUTHOR, 1960", book.toString());
+        assertThat(book.toString(), containsString("TITLE, AUTHOR, 1960"));
     }
 }

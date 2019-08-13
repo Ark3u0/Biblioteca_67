@@ -1,16 +1,16 @@
 package com.twu.biblioteca;
 
 import java.io.IOException;
-import java.io.PrintStream;
+import java.util.Optional;
 
 public class BibliotecaApp {
 
-    private final PrintStream out;
+    private final Output out;
     private final Input input;
     private final Menu menu;
     private boolean isOpenForBusiness;
 
-    public BibliotecaApp(final PrintStream out, final Input input, final Menu menu) {
+    public BibliotecaApp(final Output out, final Input input, final Menu menu) {
         this.out = out;
         this.input = input;
         this.menu = menu;
@@ -26,12 +26,14 @@ public class BibliotecaApp {
     }
 
     public void performBusiness() throws IOException {
-        input.getSelection()
-                .ifPresent(selection -> menu.select(selection, this));
+        Optional<Integer> selection = input.getSelection();
+        if (selection.isPresent()) {
+            menu.select(selection.get(), this);
+        }
     }
 
     public void welcome() {
-        out.println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
+        out.write("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
         menu.print();
     }
 
