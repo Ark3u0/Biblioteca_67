@@ -3,64 +3,55 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class BibliotecaAppTest {
 
     private BibliotecaApp app;
-    private ByteArrayOutputStream outputStream;
+    private PrintStream output;
+    private Input input;
+    private Menu menu;
 
     @Before
     public void setup() {
-        outputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(outputStream);
-        app = new BibliotecaApp(printStream);
-    }
-
-    private BufferedReader getReader() {
-        return new BufferedReader(new InputStreamReader(new ByteArrayInputStream(outputStream.toByteArray())));
+        output = mock(PrintStream.class);
+        input = mock(Input.class);
+        menu = mock(Menu.class);
+        app = new BibliotecaApp(output, input, menu);
     }
 
     @Test
-    public void shouldShowWelcomeMessageWhenStartingApplication() throws IOException {
-        app.run();
+    public void shouldMakeMenuSelectionIfInputIsPresent() throws IOException {
+        when(input.getSelection()).thenReturn(Optional.of(1));
 
-        BufferedReader reader = getReader();
+        app.performBusiness();
 
-        String actual = reader.readLine();
-
-        assertEquals("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!", actual);
+        verify(menu).select(1, app);
     }
 
     @Test
-    public void shouldShowAllBooksAvailableAfterWelcomeMessageAppears() throws IOException {
-        app.run();
+    public void shouldDoNothingIfSelectionIsNotMade() throws IOException {
+        when(input.getSelection()).thenReturn(Optional.empty());
 
-        BufferedReader reader = getReader();
+        app.performBusiness();
 
-        // Re-read welcome message
-        reader.readLine();
+        verify(menu, never()).select(anyInt(), any(BibliotecaApp.class));
+    }
 
-        List<String> books = reader.lines()
-                .collect(Collectors.toList());
+    @Test
+    public void shouldWelcomeUsersAndPrintMenuOnStartUp() throws IOException {
+        app.welcome();
 
-        assertThat(books, hasItems(
-                "Stranger in a Strange Land",
-                "1984",
-                "Fahrenheit 451",
-                "Animal Farm",
-                "Brave New World"
-        ));
+        verify(output).println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
+        verify(menu).print();
     }
 }
