@@ -1,32 +1,40 @@
 package com.twu.biblioteca;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class CheckoutBook implements Command {
-    private Output out;
-    private Input input;
+    private final ListBooks listBooksCommand;
     private final Catalog catalog;
+    private final Output out;
+    private final Input input;
 
-    public CheckoutBook(final Output out, final Input input, final Catalog catalog) {
+    public CheckoutBook(final Output out,
+                        final Input input,
+                        final Catalog catalog,
+                        final ListBooks listBooks) {
         this.out = out;
         this.input = input;
         this.catalog = catalog;
+        this.listBooksCommand = listBooks;
     }
 
     @Override
     public void perform(final BibliotecaApp app) throws IOException {
-        new ListBooks(out, catalog).perform(app);
+        listBooksCommand.perform(app);
 
         out.write("Enter id of book to checkout: ");
-        input.getSelection().ifPresent(bookId -> {
+        Optional<Integer> selection = input.getSelection();
+        if (selection.isPresent()) {
+            Integer bookId = selection.get();
             BookStatus status = catalog.checkBookStatus(bookId);
             if (status == BookStatus.AVAILABLE) {
                 catalog.checkoutBook(bookId);
-                out.write(String.format("Book with id %d successfully checked out.", bookId));
+                out.write("Thank you! Enjoy the book.");
             } else {
-                out.write(String.format("Book with id %d is unavailable.", bookId));
+                out.write("Sorry, that book is not available.");
             }
-        });
+        };
     }
 
     @Override

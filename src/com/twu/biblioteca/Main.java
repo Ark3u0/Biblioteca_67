@@ -18,10 +18,13 @@ public class Main {
         final Output out = new Output(System.out);
         final Catalog catalog = new Catalog(asList(book1, book2, book3, book4, book5));
 
+        ListBooks listBooks = new ListBooks(out, catalog);
+        CheckoutBook checkoutBook = new CheckoutBook(out, in, catalog, listBooks);
+        Quit quit = new Quit();
         final Menu menu = new Menu(asList(
-                new ListBooks(out, catalog),
-                new CheckoutBook(out, in, catalog),
-                new Quit()
+                listBooks,
+                checkoutBook,
+                quit
         ), out);
 
         new BibliotecaApp(
