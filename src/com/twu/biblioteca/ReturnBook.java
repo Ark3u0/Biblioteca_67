@@ -30,9 +30,9 @@ public class ReturnBook implements Command {
             BookStatus status = catalog.checkBookStatus(bookId);
             if (status == BookStatus.CHECKED_OUT) {
                 catalog.returnBook(bookId);
-                out.write("Thank you! We hope to see you again.");
+                out.write("Thank you for returning the book.");
             } else {
-                out.write("Sorry, that book is not checked out in our system.");
+                out.write("That is not a valid book to return.");
             }
         }
     }

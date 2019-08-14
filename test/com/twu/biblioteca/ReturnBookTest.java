@@ -54,7 +54,7 @@ public class ReturnBookTest {
         command.perform(null);
 
         verify(output).write("Enter id of book to return: ");
-        verify(output).write("Thank you! We hope to see you again.");
+        verify(output).write("Thank you for returning the book.");
 
         assertThat(catalog.checkBookStatus(book1.getId()), is(AVAILABLE));
     }
@@ -66,7 +66,7 @@ public class ReturnBookTest {
         command.perform(null);
 
         verify(output).write("Enter id of book to return: ");
-        verify(output).write("Sorry, that book is not checked out in our system.");
+        verify(output).write("That is not a valid book to return.");
 
         assertThat(catalog.checkBookStatus(book2.getId() + 1), is(DOES_NOT_EXIST));
     }
