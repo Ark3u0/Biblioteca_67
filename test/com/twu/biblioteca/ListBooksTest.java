@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.PrintStream;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;

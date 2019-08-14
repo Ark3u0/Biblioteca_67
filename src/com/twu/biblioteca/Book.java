@@ -38,4 +38,8 @@ public class Book {
     public void checkout() {
         status = BookStatus.CHECKED_OUT;
     }
+
+    public void returnBack() {
+        status = BookStatus.AVAILABLE;
+    }
 }

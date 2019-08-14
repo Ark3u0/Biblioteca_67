@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.twu.biblioteca.BookStatus.CHECKED_OUT;
+import static com.twu.biblioteca.BookStatus.AVAILABLE;
 import static com.twu.biblioteca.BookStatus.DOES_NOT_EXIST;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
@@ -15,60 +15,59 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class CheckoutBookTest {
+public class ReturnBookTest {
 
     private Book book1;
     private Book book2;
-    private CheckoutBook command;
-    private ListBooks listBooksCommand;
+    private Catalog catalog;
     private Output output;
     private Input input;
-    private Catalog catalog;
+    private ReturnBook command;
+    private ListBooks listBooksCommand;
 
     @Before
     public void setup() {
         book1 = new Book("Stranger in a Strange Land", "Robert A. Heinlein", 1961);
         book2 = new Book("1984", "George Orwell", 1949);
+        book1.checkout();
 
         catalog = new Catalog(asList(book1, book2));
-
+        listBooksCommand = mock(ListBooks.class);
         output = mock(Output.class);
         input = mock(Input.class);
-        listBooksCommand = mock(ListBooks.class);
-        command = new CheckoutBook(output, input, catalog, listBooksCommand);
+        command = new ReturnBook(output, input, catalog, listBooksCommand);
     }
 
     @Test
-    public void shouldListBooksWhenCheckingOutBook() throws IOException {
+    public void shouldListCheckedOutBooksWhenReturningBook() throws IOException {
         when(input.getSelection()).thenReturn(Optional.of(1));
 
         command.perform(null);
 
-        verify(listBooksCommand).printAvailableBookList();
+        verify(listBooksCommand).printCheckedOutBookList();
     }
 
     @Test
-    public void shouldPromptUserToEnterIdOfBookAndNotifyThemIfSuccessfulCheckout() throws IOException {
+    public void shouldPromptUserToEnterIdOfBookAndNotifyThemIfSuccessfulReturn() throws IOException {
         when(input.getSelection()).thenReturn(Optional.of(book1.getId()));
 
         command.perform(null);
 
-        verify(output).write("Enter id of book to checkout: ");
-        verify(output).write("Thank you! Enjoy the book.");
+        verify(output).write("Enter id of book to return: ");
+        verify(output).write("Thank you! We hope to see you again.");
 
-        assertThat(catalog.checkBookStatus(book1.getId()), is(CHECKED_OUT));
+        assertThat(catalog.checkBookStatus(book1.getId()), is(AVAILABLE));
     }
 
     @Test
-    public void shouldPromptUserToEnterIdOfBookAndNotifyThemIfUnsuccessfulCheckout() throws IOException {
+    public void shouldPromptUserToEnterIdOfBookAndNotifyThemIfUnsuccessfulReturn() throws IOException {
         when(input.getSelection()).thenReturn(Optional.of(book2.getId() + 1));
 
         command.perform(null);
 
-        verify(output).write("Enter id of book to checkout: ");
-        verify(output).write("Sorry, that book is not available.");
+        verify(output).write("Enter id of book to return: ");
+        verify(output).write("Sorry, that book is not checked out in our system.");
 
         assertThat(catalog.checkBookStatus(book2.getId() + 1), is(DOES_NOT_EXIST));
     }
-
 }

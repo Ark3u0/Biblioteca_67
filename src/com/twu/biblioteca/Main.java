@@ -20,10 +20,12 @@ public class Main {
 
         ListBooks listBooks = new ListBooks(out, catalog);
         CheckoutBook checkoutBook = new CheckoutBook(out, in, catalog, listBooks);
+        ReturnBook returnBook = new ReturnBook(out, in, catalog, listBooks);
         Quit quit = new Quit();
         final Menu menu = new Menu(asList(
                 listBooks,
                 checkoutBook,
+                returnBook,
                 quit
         ), out);
 

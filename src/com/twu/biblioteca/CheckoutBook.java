@@ -21,7 +21,7 @@ public class CheckoutBook implements Command {
 
     @Override
     public void perform(final BibliotecaApp app) throws IOException {
-        listBooksCommand.perform(app);
+        listBooksCommand.printAvailableBookList();
 
         out.write("Enter id of book to checkout: ");
         Optional<Integer> selection = input.getSelection();
@@ -34,7 +34,7 @@ public class CheckoutBook implements Command {
             } else {
                 out.write("Sorry, that book is not available.");
             }
-        };
+        }
     }
 
     @Override

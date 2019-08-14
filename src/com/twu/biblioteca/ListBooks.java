@@ -17,8 +17,7 @@ public class ListBooks implements Command {
         return "List of books";
     }
 
-    @Override
-    public void perform(final BibliotecaApp app) {
+    public void printAvailableBookList() {
         List<String> toWrite = new ArrayList<>();
 
         toWrite.add("Books: ");
@@ -27,5 +26,21 @@ public class ListBooks implements Command {
         }
 
         out.write(toWrite);
+    }
+
+    public void printCheckedOutBookList() {
+        List<String> toWrite = new ArrayList<>();
+
+        toWrite.add("Books: ");
+        for (Book book : catalog.listCheckedOutBooks()) {
+            toWrite.add(book.toString());
+        }
+
+        out.write(toWrite);
+    }
+
+    @Override
+    public void perform(final BibliotecaApp app) {
+        printAvailableBookList();
     }
 }

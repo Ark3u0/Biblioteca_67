@@ -16,6 +16,14 @@ public class Catalog {
         }
     }
 
+    public List<Book> listCheckedOutBooks() {
+        return bookEntries.values()
+                .stream()
+                .filter(book -> book.getStatus()
+                        .equals(BookStatus.CHECKED_OUT))
+                .collect(toList());
+    }
+
     public List<Book> listAvailableBooks() {
         return bookEntries.values()
                 .stream()
@@ -36,5 +44,10 @@ public class Catalog {
     public void checkoutBook(final Integer bookId) {
         Book book = bookEntries.get(bookId);
         book.checkout();
+    }
+
+    public void returnBook(final Integer bookId) {
+        Book book = bookEntries.get(bookId);
+        book.returnBack();
     }
 }
